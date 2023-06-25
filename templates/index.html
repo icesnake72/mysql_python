@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO-DO</title>
+</head>
+<body>
+    <h2>TO-DO App.</h2>
+    {% if signin==True %}
+        <p><span>{{nick_name}}님, 반갑습니다.  <a href="/logout">로그아웃</a></span></p>
+        <p>새로운 할일</p>
+        <form action="/input_todo" method="post">
+            <input type="text" placeholder="새로운 할일을 입력하세요" name="InputTodo"/>
+            <input type="submit" value="저장"/>
+        </form>
+        <ul>
+            {% for row in todos %}
+                <li><span>{{row[0]}}</span> <span>{{row[1]}} {{ '완료' if row[2] else '미완료' }}</span></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+    
+    
+
+    <!-- 이 사이에 내용을 적으면 주석입니다. -->
+    <!-- Http Method : get, post -->
+    <!-- get : url에 데이터를 포함시킴, 브자우져 캐시를 지원하여 불필요한 네트워크 소모를 줄일수 있음 -->
+    <!-- post : url에 데이터를 포함시키지 않고 데이터를 request body에 포함시켜 요청 데이터를 노출시키지 않음, 브자우져 캐시를 지원하지 않음 -->
+
+    <!-- get : 데이터 검색 및 조회(Read) 작업을 처리하는데 주로 사용함 -->
+    <!-- post : 데이터 입력, 업데이트 작업을 하는데 주로 사용함 -->
+
+        <form action="/login" method="post">
+            <input type="email" placeholder="이메일 아이디를 입력하세요" name="InputEmail"/>
+            <input type="password" placeholder="비밀번호를 입력하세요" name="InputPassword"/>
+            <input type="submit" value="로그인">
+        </form>
+        <p>TO-DO App.을 사용하시려면 <a href="/signup">회원가입</a>을 해주세요</p>
+    {% endif %}
+</body>
+</html>
