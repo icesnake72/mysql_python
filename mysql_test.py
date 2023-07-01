@@ -148,6 +148,7 @@ if __name__ == '__main__':
   app.config['MYSQL_DB'] = DB_NAME
   mysql = MySQL(app)
   app.run(port=SERV_PORT, debug=True)
+  # app.run(host='0.0.0.0', port=SERV_PORT) #, debug=True
 
 
 

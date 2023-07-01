@@ -4,21 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TO-DO</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
 </head>
 <body>
-    <h2>TO-DO App.</h2>
+    <h2>내 할일 목록</h2>
     {% if signin==True %}
         <p><span>{{nick_name}}님, 반갑습니다.  <a href="/logout">로그아웃</a></span></p>
-        <p>새로운 할일</p>
-        <form action="/input_todo" method="post">
+        <div id="clock"></div>        
+        <div>
+          <form action="/input_todo" method="post">
+            <label>새로운 할일</label>
             <input type="text" placeholder="새로운 할일을 입력하세요" name="InputTodo"/>
             <input type="submit" value="저장"/>
-        </form>
-        <ul>
+          </form>
+        </div>
+        
+        <table>
             {% for row in todos %}
-                <li><span>{{row[0]}}</span> <span>{{row[1]}} {{ '완료' if row[2] else '미완료' }}</span></li>
+                <tr>
+                  <td>
+                  {% if row[2] %}
+                    <input type="checkbox" id="checkbox1" checked></td>
+                  {% else %}
+                    <input type="checkbox" id="checkbox1"></td>
+                  {% endif %}                  
+                  <td>{{row[1]}}</td> 
+                  <td>{{row[3]}}</td> 
+                  <td><button onclick="todoUpdate()">수정</button></td> 
+                  <td><button onclick="todoDelete()">삭제</button></td> 
+                </tr>
             {% endfor %}
-        </ul>
+        </table>
     {% else %}
     
     
@@ -38,5 +54,6 @@
         </form>
         <p>TO-DO App.을 사용하시려면 <a href="/signup">회원가입</a>을 해주세요</p>
     {% endif %}
+    <script src="{{ url_for('static', filename='js/todo.js') }}"></script>
 </body>
 </html>
