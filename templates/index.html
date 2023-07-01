@@ -24,9 +24,9 @@
                 <tr>
                   <td>
                   {% if row[2] %}
-                    <input type="checkbox" id="checkbox1" checked></td>
+                    <input type="checkbox" onclick="checkBoxClick('{{row[0]}}, {{row[4]}}')" checked></td>
                   {% else %}
-                    <input type="checkbox" id="checkbox1"></td>
+                    <input type="checkbox" onclick="checkBoxClick('{{row[0]}}, {{row[4]}}')"></td>
                   {% endif %}                  
                   <td>{{row[1]}}</td> 
                   <td>{{row[3]}}</td> 
