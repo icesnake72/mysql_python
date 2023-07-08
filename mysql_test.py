@@ -1,4 +1,4 @@
-import mysql.connector
+# import mysql.connector
 from flask import Flask, render_template, redirect as rd, url_for, request, session
 from flask_mysqldb import MySQL, MySQLdb
 from my_constant import *
@@ -17,12 +17,12 @@ def index():
 
 
 def get_todos(user_id):
-  sql = 'select * from todos where user_id=%s'
+  sql = 'select * from todos where user_id=%s order by done, created_time'
   val = (user_id,)  # 튜플에 값 한개만 입력할때는 ()의 사용이 튜플임을 알리기 위해 ,를 찍는다
   cursor = mysql.connection.cursor()  # todos 데이터베이스에 연결한다
   cursor.execute(sql, val)     # 위에 sql, val 변수를 이용하여 mysql에 쿼리문을 전달하고 실행한다.
   result = cursor.fetchall()  # mysql에서 실행한 결과의 모든 행을 받아온다
-  cursor.close();
+  cursor.close()
   return result
 
 
@@ -140,15 +140,60 @@ def input_todo():
 
   return rd(HOME)
 
+@app.route('/update_done', methods=[POST])
+def updateDone():    
+  if request.method!=POST:
+     return "잘못된 경로로 접근하였습니다"
+  
+  done = request.json['done']
+  #print(str(done))
+
+  user_id = request.json['user_id']
+  #print(str(user_id))
+
+  todo_id = request.json['todo_id']
+  #print(str(todo_id))  
+
+  # sql = 'update 테이블명 set 필드명=값 where 조건'
+  sql = 'update todos set done=%s where id=%s and user_id=%s'
+  val = (done, todo_id, user_id)
+
+  cursor = mysql.connection.cursor()
+  cursor.execute(sql, val)
+  mysql.connection.commit()
+  cursor.close()
+
+  return rd(HOME)
+
+
+@app.route('/delete_todo', methods=[POST])
+def deleteTodo():  
+  todo_id = request.json['todo_id']
+  print(todo_id)
+
+  # sql = 'delete from 테이블명 where 조건'
+  sql = 'delete from todos where id=%s'
+  val = (todo_id,)
+
+  cursor = mysql.connection.cursor()
+  cursor.execute(sql, val)
+
+  mysql.connection.commit()
+  cursor.close()
+
+  return rd(HOME)
+
+
 if __name__ == '__main__':  
   app.secret_key = SECRET_KEY
+  app.config['TEMPLATES_AUTO_RELOAD'] = True
   app.config['MYSQL_HOST'] = DB_HOST
   app.config['MYSQL_USER'] = DB_USER
   app.config['MYSQL_PASSWORD'] = DB_PASSWD
   app.config['MYSQL_DB'] = DB_NAME
   mysql = MySQL(app)
-  app.run(port=SERV_PORT, debug=True)
-  # app.run(host='0.0.0.0', port=SERV_PORT) #, debug=True
+  # app.run(port=SERV_PORT, debug=True)
+  app.run(host='0.0.0.0', port=SERV_PORT) #, debug=True
 
 
 

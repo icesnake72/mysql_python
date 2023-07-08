@@ -1,3 +1,105 @@
-h2 {
-   color: darkblue; 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;500;900&display=swap');
+
+a {
+   color: black;
+   text-decoration: none;
+}
+
+.content {
+   position: relative;
+   width: 100%;         
+}
+
+.top-nav {      
+   background-color:cornflowerblue;
+   color:white;
+   width: 100%;
+   padding: 1em 1em 1em;
+}
+
+.top-nav a {
+   color : white;
+   text-decoration: none;
+}
+
+.top-nav .nav-content {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between;   
+}
+
+.login {   
+   width: 300px;
+   margin: 0 auto;
+   padding: 5em 0 5em;
+   text-align: center;
+}
+
+.footer {   
+   width: 100%;      
+   background-color:#f0f0f0;
+   padding: 2em 1em 2em;
+}
+
+.todos {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   padding: 2em 1em 2em;
+}
+
+.input-todo {
+   margin: 1em 0 2em;
+}
+
+.save-todo-btn {
+   width: 80px;   
+}
+
+.todo-row {
+   display: flex;
+   flex-direction: column;
+   justify-content: start;
+}
+
+.todo-label {
+   margin-left: 4px;
+   word-wrap: normal;
+}
+
+.todo-done {
+   margin-left: 4px;
+   color: darkgray;
+   text-decoration: line-through;
+   word-wrap: normal;
+}
+
+.todo-time {
+   font-family: 'Noto Sans KR', sans-serif;
+   font-size: 14px;
+   font-weight: 100;
+   color: darkgray;
+   margin-left: 20px;
+}
+
+.clock {
+   font-family: 'Noto Sans KR', sans-serif;
+   font-size: 12px;
+   font-weight: 100;
+   color: darkgray;
+   text-align: end;
+}
+
+.todo-row button {
+   border: none;
+   background-color: rgba( 255, 255, 255, 0.0 );   
+}
+
+.trash-btn {
+   color: red;
+}
+
+
+.signup-input::placeholder {
+   color:darkgray;
 }

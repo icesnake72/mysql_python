@@ -16,8 +16,8 @@ SERV_PORT:Final = 5001
 SECRET_KEY:Final = 'student_application_secret_key_25798237985792379582092042093437'
 
 # HTTP Methods
-POST:Final = 'post'
-GET:Final = 'get'
+POST:Final = 'POST'
+GET:Final = 'GET'
 
 
 # 사용될 route 정의

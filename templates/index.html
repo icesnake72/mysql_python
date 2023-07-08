@@ -1,59 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TO-DO</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
-</head>
-<body>
-    <h2>내 할일 목록</h2>
-    {% if signin==True %}
-        <p><span>{{nick_name}}님, 반갑습니다.  <a href="/logout">로그아웃</a></span></p>
-        <div id="clock"></div>        
-        <div>
-          <form action="/input_todo" method="post">
-            <label>새로운 할일</label>
-            <input type="text" placeholder="새로운 할일을 입력하세요" name="InputTodo"/>
-            <input type="submit" value="저장"/>
-          </form>
-        </div>
-        
-        <table>
-            {% for row in todos %}
-                <tr>
-                  <td>
-                  {% if row[2] %}
-                    <input type="checkbox" onclick="checkBoxClick('{{row[0]}}, {{row[4]}}')" checked></td>
-                  {% else %}
-                    <input type="checkbox" onclick="checkBoxClick('{{row[0]}}, {{row[4]}}')"></td>
-                  {% endif %}                  
-                  <td>{{row[1]}}</td> 
-                  <td>{{row[3]}}</td> 
-                  <td><button onclick="todoUpdate()">수정</button></td> 
-                  <td><button onclick="todoDelete()">삭제</button></td> 
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-    
-    
-
-    <!-- 이 사이에 내용을 적으면 주석입니다. -->
-    <!-- Http Method : get, post -->
-    <!-- get : url에 데이터를 포함시킴, 브자우져 캐시를 지원하여 불필요한 네트워크 소모를 줄일수 있음 -->
-    <!-- post : url에 데이터를 포함시키지 않고 데이터를 request body에 포함시켜 요청 데이터를 노출시키지 않음, 브자우져 캐시를 지원하지 않음 -->
-
-    <!-- get : 데이터 검색 및 조회(Read) 작업을 처리하는데 주로 사용함 -->
-    <!-- post : 데이터 입력, 업데이트 작업을 하는데 주로 사용함 -->
-
-        <form action="/login" method="post">
-            <input type="email" placeholder="이메일 아이디를 입력하세요" name="InputEmail"/>
-            <input type="password" placeholder="비밀번호를 입력하세요" name="InputPassword"/>
-            <input type="submit" value="로그인">
+{% extends "base.html" %}
+{% block title %}To Do{% endblock %}
+{% block head %}
+    {{ super() }}    
+{% endblock %}
+{% block content %}
+  <div class="top-nav">
+    <div class="nav-content">
+      <i class="fs-5 bi bi-check2-square"></i>
+      <span class="fs-4">To Do</span>      
+      {% if signin==True %}
+        <span>{{nick_name}} 님, <a href="/logout" title="로그아웃"><i class="bi bi-box-arrow-right"></i></a></span>
+      {% else %}
+        <a href="/signup" target="_self">회원가입</a>
+      {% endif %}
+    </div>
+  </div>
+  {% if signin==True %}
+    <!-- <p><span>{{nick_name}}님, 반갑습니다.  <a href="/logout">로그아웃</a></span></p> -->
+    <div class="todos">
+      <div class="clock" id="clock"></div>        
+      <div class="input-todo">
+        <form class="row" action="/input_todo" method="post">
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="새로운 할일을 입력하세요" name="InputTodo"/>
+          </div>
+          <div class="col-sm-2">
+            <button type="submit" class="btn btn-primary form-control">저장</button>          
+          </div>          
         </form>
-        <p>TO-DO App.을 사용하시려면 <a href="/signup">회원가입</a>을 해주세요</p>
-    {% endif %}
-    <script src="{{ url_for('static', filename='js/todo.js') }}"></script>
-</body>
-</html>
+      </div>
+        
+      <div class="list-group list-group-flush todo-row">
+        {% for row in todos %}
+          <div class="list-group-item">
+              {% if row[2] %}
+                <div>
+                  <input type="checkbox" onclick="checkBoxClick(event, '{{row[0]}}', '{{row[4]}}')" checked>
+                  <label class="todo-done">{{row[1]}}</label>
+                  <button class="trash-btn" onclick="todoDelete('{{row[0]}}')"><i class="bi bi-trash3"></i></button>
+                  <div>
+                    <label class="todo-time">{{row[3]}}</label>
+                  </div> 
+                </div>                
+              {% else %}
+                <div>
+                  <input type="checkbox" onclick="checkBoxClick(event, '{{row[0]}}', '{{row[4]}}')">
+                  <label class="todo-label">{{row[1]}}</label> 
+                  <button class="trash-btn" onclick="todoDelete('{{row[0]}}')"><i class="bi bi-trash3"></i></button>
+                </div>                                
+                <div class="todo-time">{{row[3]}}</div> 
+              {% endif %}              
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+  
+  
+
+  <!-- 이 사이에 내용을 적으면 주석입니다. -->
+  <!-- Http Method : get, post -->
+  <!-- get : url에 데이터를 포함시킴, 브자우져 캐시를 지원하여 불필요한 네트워크 소모를 줄일수 있음 -->
+  <!-- post : url에 데이터를 포함시키지 않고 데이터를 request body에 포함시켜 요청 데이터를 노출시키지 않음, 브자우져 캐시를 지원하지 않음 -->
+
+  <!-- get : 데이터 검색 및 조회(Read) 작업을 처리하는데 주로 사용함 -->
+  <!-- post : 데이터 입력, 업데이트 작업을 하는데 주로 사용함 -->
+  <div class="login">
+    <!-- <i class="fs-2 bi bi-ui-checks"></i> -->
+    <img src="{{ url_for('static', filename='imgs/todo.png') }}">
+    <form class="mt-3" action="/login" method="post">
+      <div class="mb-3">
+        <input type="email" class="form-control" placeholder="이메일 아이디를 입력하세요" name="InputEmail"/>
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control" placeholder="비밀번호를 입력하세요" name="InputPassword"/>
+      </div>      
+      <input type="submit" class="form-control btn btn-primary" value="로그인">
+    </form>  
+  </div>  
+  {% endif %}
+{% endblock %}
