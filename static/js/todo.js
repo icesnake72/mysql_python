@@ -29,7 +29,7 @@ function todoDelete(id)
 {
     console.log("삭제")
 
-    var url = "http://172.30.1.71:5001/delete_todo";
+    var url = "http://172.30.1.19:5001/delete_todo";
     var data = {'todo_id':id };
     fetchUrl(url, data)   
 }
@@ -40,7 +40,7 @@ function checkBoxClick(event, id, user_id)
     // console.log(event.target.checked);
     console.log("checkbox click");
 
-    var url = "http://172.30.1.71:5001/update_done";
+    var url = "http://172.30.1.19:5001/update_done";
     var data = {'todo_id':id, 'user_id': user_id, 'done':event.target.checked };
     fetchUrl(url, data)
 
