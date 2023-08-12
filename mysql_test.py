@@ -46,11 +46,11 @@ def login_app():
     # len() 을 이용하여 결과값이 1보다 크면 중복 사용자가 있는것이므로 오류를 반환한다!!!
     if len(result) > 1 :
       login_info['email_id'] = 'null'
-      login_info['nick_nake'] = 'null'
+      login_info['nick_name'] = 'null'
       login_info['id'] = 'null'
     else:      
       login_info['email_id'] = email_id
-      login_info['nick_nake'] = result[0][3]
+      login_info['nick_name'] = result[0][3]
       login_info['id'] = result[0][0]
 
     ret_json = json.dumps(login_info, ensure_ascii=False, indent='\t')
@@ -230,7 +230,7 @@ if __name__ == '__main__':
   app.config['MYSQL_DB'] = DB_NAME
   mysql = MySQL(app)
   # app.run(port=SERV_PORT, debug=True)
-  app.run(host='0.0.0.0', port=SERV_PORT) #, debug=True
+  app.run(host='0.0.0.0', port=SERV_PORT, debug=True)
 
 
 
