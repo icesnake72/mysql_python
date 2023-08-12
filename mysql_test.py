@@ -2,6 +2,7 @@
 from flask import Flask, render_template, redirect as rd, url_for, request, session
 from flask_mysqldb import MySQL, MySQLdb
 from my_constant import *
+import json
 
 
 app = Flask(__name__)
@@ -24,6 +25,42 @@ def get_todos(user_id):
   result = cursor.fetchall()  # mysql에서 실행한 결과의 모든 행을 받아온다
   cursor.close()
   return result
+
+
+@app.route('/login_app', methods=['post'])
+def login_app():
+  if request.method=='POST':
+    email_id = request.form['InputEmail']     # index.html의 form에서 넘겨받은 email id ---> name : InputEmail
+    password = request.form['InputPassword']  # index.html의 form에서 넘겨받은 password ---> name : InputPassword
+
+    # mysql 데이터베이스를 핸들링하기 위한 핸들러를 생성한다!!!
+    cursor = mysql.connection.cursor()  # todos 데이터베이스에 연결한다
+    sql = 'select * from users where email=%s and password=%s'  # 쿼리문을 작성한다 : index.html의 form으로부터 넘겨받은 email과 password를 이용하여
+    val = (email_id, password)  # sql 변수의 %s 부분에 각각 포맷팅될 값을 튜플의 형식으로 지정한다.
+    cursor.execute(sql, val)     # 위에 sql, val 변수를 이용하여 mysql에 쿼리문을 전달하고 실행한다.
+    result = cursor.fetchall()  # mysql에서 실행한 결과의 모든 행을 받아온다
+    cursor.close()     # 데이터베이스 핸들러를 닫아준다!!! (중요 : 핸들러는 사용후에 반드시 닫아주어야 한다!!!) 
+
+    login_info = dict()
+
+    # len() 을 이용하여 결과값이 1보다 크면 중복 사용자가 있는것이므로 오류를 반환한다!!!
+    if len(result) > 1 :
+      login_info['email_id'] = 'null'
+      login_info['nick_nake'] = 'null'
+      login_info['id'] = 'null'
+    else:      
+      login_info['email_id'] = email_id
+      login_info['nick_nake'] = result[0][3]
+      login_info['id'] = result[0][0]
+
+    ret_json = json.dumps(login_info, ensure_ascii=False, indent='\t')
+    print(ret_json)
+    return ret_json
+
+  return '<p>잘못된 접근 방식입니다</p>'
+
+
+
 
 
 @app.route('/login', methods=['POST'])
