@@ -14,7 +14,42 @@ def index():
     return render_template(INDEX_HTML, todos=todos, signin=True, nick_name=session.get(NICK_NAME))
   
   return render_template(INDEX_HTML, signin=False)
-  # return '<h1>Hello Flask!!!</h1>'
+  
+
+@app.route('/get_user_todos', methods=['POST'])
+def get_user_todos():
+  if request.method=='POST':
+    email_id = request.form['InputEmail']     # index.html의 form에서 넘겨받은 email id ---> name : InputEmail
+    user_id = request.form['InputID']  # index.html의 form에서 넘겨받은 password ---> name : InputPassword
+
+    # login 가정하고
+    todos = get_todos(user_id)
+    print(todos)
+    return todosToJson(todos)
+  
+  print(session)
+  print("not in session")
+  return "not in session"
+
+
+def todosToJson(todos) -> str:
+  liTodos = []
+  result = dict() 
+  
+  for item in todos:
+    todo = dict()
+    todo["id"] = item[0]
+    todo["todo"] = item[1]
+    todo["done"] = item[2]
+    todo["created_time"] = item[3].strftime("%Y-%m-%d %H:%M:%S")
+    todo["user_id"] = item[4]
+    liTodos.append( todo )
+
+  result["todos"] = liTodos
+  print(result)
+  ret_json = json.dumps(result, ensure_ascii=False, indent="\t")
+  print(ret_json)
+  return ret_json
 
 
 def get_todos(user_id):
@@ -52,6 +87,11 @@ def login_app():
       login_info['email_id'] = email_id
       login_info['nick_name'] = result[0][3]
       login_info['id'] = result[0][0]
+
+      # session[EMAIL_ID] = email_id      # 이 email은 쿼리로 얻어온 값과 같다
+      # session[NICK_NAME] = result[0][3]  # 쿼리해서 얻어온 닉네임
+      # session[USER_ID] = result[0][0]       # 쿼리해서 얻어온 id
+      # return rd('/get_user_todos')
 
     ret_json = json.dumps(login_info, ensure_ascii=False, indent='\t')
     print(ret_json)
